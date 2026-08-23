@@ -20,4 +20,4 @@ The SQLite database is stored in the platform-specific application data director
 
 CSV imports require `lemma` and `source_name` columns. Optional columns include `part_of_speech`, `definition_en`, `definition_zh`, `ipa`, `example_sentence`, `source_group`, `source_rank`, and `is_high_priority`.
 
-See [SPEC.md](SPEC.md) for product requirements, [ARCHITECTURE.md](ARCHITECTURE.md) for engineering decisions, and [DATA_SOURCES.md](DATA_SOURCES.md) for dataset policy.
+See [SPEC.md](SPEC.md) for product requirements, [ROADMAP.md](ROADMAP.md) for implementation status, [ARCHITECTURE.md](ARCHITECTURE.md) for engineering decisions, and [DATA_SOURCES.md](DATA_SOURCES.md) for dataset policy.

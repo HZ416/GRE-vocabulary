@@ -11,6 +11,13 @@ interface WordRow {
   priority_score: number; notes: string | null; created_at: string; updated_at: string
 }
 
+type VocabularyListRow = WordRow & {
+  status: VocabularyListItem['status']
+  next_review_at: string | null
+  is_favorite: number
+  is_difficult: number
+}
+
 function mapWord(row: WordRow): Word {
   return {
     id: row.id, lemma: row.lemma, partOfSpeech: row.part_of_speech, ipa: row.ipa,
@@ -18,6 +25,13 @@ function mapWord(row: WordRow): Word {
     exampleSentence: row.example_sentence, mnemonic: row.mnemonic, roots: row.roots,
     difficulty: row.difficulty, frequencyTier: row.frequency_tier, priorityScore: row.priority_score,
     notes: row.notes, createdAt: row.created_at, updatedAt: row.updated_at,
+  }
+}
+
+function mapVocabularyListItem(row: VocabularyListRow): VocabularyListItem {
+  return {
+    ...mapWord(row), status: row.status, nextReviewAt: row.next_review_at,
+    isFavorite: Boolean(row.is_favorite), isDifficult: Boolean(row.is_difficult),
   }
 }
 
@@ -56,15 +70,20 @@ export class SqliteVocabularyRepository implements VocabularyRepository {
 
   async list(query = ''): Promise<VocabularyListItem[]> {
     const pattern = `%${query.trim()}%`
-    const rows = await this.database.select<WordRow & {
-      status: VocabularyListItem['status']; next_review_at: string | null; is_favorite: number; is_difficult: number
-    }>(`SELECT ${wordColumns}, COALESCE(s.status, 'new') AS status, s.next_review_at,
+    const rows = await this.database.select<VocabularyListRow>(`SELECT ${wordColumns}, COALESCE(s.status, 'new') AS status, s.next_review_at,
       COALESCE(s.is_favorite, 0) AS is_favorite, COALESCE(s.is_difficult, 0) AS is_difficult
       FROM words w LEFT JOIN user_word_state s ON s.word_id = w.id
       WHERE (? = '%%' OR w.lemma LIKE ? COLLATE NOCASE OR w.definition_en LIKE ? COLLATE NOCASE OR w.definition_zh LIKE ?)
       ORDER BY w.priority_score DESC, w.lemma ASC LIMIT 500`, [pattern, pattern, pattern, pattern])
-    return rows.map((row) => ({ ...mapWord(row), status: row.status, nextReviewAt: row.next_review_at,
-      isFavorite: Boolean(row.is_favorite), isDifficult: Boolean(row.is_difficult) }))
+    return rows.map(mapVocabularyListItem)
+  }
+
+  async listFlagged(flag: 'favorite' | 'difficult'): Promise<VocabularyListItem[]> {
+    const column = flag === 'favorite' ? 'is_favorite' : 'is_difficult'
+    const rows = await this.database.select<VocabularyListRow>(`SELECT ${wordColumns}, s.status, s.next_review_at,
+      s.is_favorite, s.is_difficult FROM words w JOIN user_word_state s ON s.word_id = w.id
+      WHERE s.${column} = 1 ORDER BY w.priority_score DESC, w.lemma ASC`)
+    return rows.map(mapVocabularyListItem)
   }
 
   async getDetail(id: string): Promise<WordDetail | null> {

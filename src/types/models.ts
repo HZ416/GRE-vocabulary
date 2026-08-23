@@ -86,3 +86,26 @@ export interface WordDetail {
 export interface StudyWord extends Word {
   studyState: UserWordState | null
 }
+
+export interface DashboardSummary {
+  newWords: number
+  due: number
+  overdue: number
+  total: number
+  totalWords: number
+  introduced: number
+  learning: number
+  inReview: number
+  mastered: number
+}
+
+export interface StatisticsSummary {
+  wordsIntroduced: number
+  wordsReviewed: number
+  wordsMastered: number
+  reviewsToday: number
+  accuracyToday: number | null
+  currentStreak: number
+  totalReviews: number
+  overallAccuracy: number | null
+}
