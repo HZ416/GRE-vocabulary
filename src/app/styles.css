@@ -124,6 +124,7 @@ kbd { margin-left: 9px; padding: 2px 6px; font: 11px ui-monospace, monospace; bo
 .export-panel > p { color: #68756f; }
 .export-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
 .secondary-button { color: #1d5b47; background: #e7f0eb; }
+.danger-button { color: #8b3030; background: #f7e8e8; }
 .export-panel > small { display: block; margin-top: 15px; color: #7a8781; line-height: 1.5; }
 .notes-panel textarea { width: 100%; min-height: 130px; resize: vertical; padding: 12px; color: inherit; background: transparent; border: 1px solid #ccd5d0; border-radius: 8px; font: inherit; line-height: 1.5; }
 .notes-panel > div { display: flex; align-items: center; gap: 13px; margin-top: 12px; }

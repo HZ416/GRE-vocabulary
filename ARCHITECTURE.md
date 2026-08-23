@@ -23,3 +23,7 @@ CSV rows are normalized and deduplicated before persistence. Imports only fill m
 ## FSRS cards are fully restart-safe
 
 The scheduler is deterministic and isolated in `src/fsrs/`. Every rating stores the complete card state and review log in one SQLite transaction. Migration 002 adds the scheduling fields required to reconstruct a `ts-fsrs` card without silently resetting it.
+
+## Database restore fails safely
+
+Restore is handled by a dedicated Rust command after frontend SQL connections are checkpointed and closed. A candidate must pass SQLite integrity, schema, migration, settings, and foreign-key checks. The active database is copied to `gre-vocabulary-before-restore.db` before replacement; the copied candidate is validated again and the original is recovered if that final check fails.

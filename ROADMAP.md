@@ -15,6 +15,7 @@
 - [x] Vocabulary CSV/JSON and learning-progress JSON exports
 - [x] Full SQLite database backup from the Settings page
 - [x] First-run setup flow, CSV field guidance, and saveable import template
+- [x] Validated SQLite restore with confirmation and automatic rollback copy
 
 ## Next: smaller improvements
 
@@ -22,7 +23,6 @@
 
 ## Next: medium improvements
 
-- [ ] Restore from a validated backup
 - [ ] Real file-backed SQLite restart and migration tests
 - [ ] React Testing Library coverage for core pages
 - [ ] Playwright end-to-end review flow

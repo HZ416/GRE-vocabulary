@@ -20,6 +20,8 @@ The SQLite database is stored in the platform-specific application data director
 
 Use **Settings → Export and backup** to save vocabulary as CSV or JSON, learning progress as JSON, or a complete `.db` backup. CSV and JSON are portable data exports; the `.db` file is the complete local snapshot, including notes, settings, flags, FSRS state, and review history.
 
+Use **Restore database backup** to replace local data from a compatible SQLite backup. Before replacement, the app checks SQLite integrity, schema version, required tables and columns, settings, and foreign-key relationships. The previous database is retained as `gre-vocabulary-before-restore.db` in the application data directory, and a failed final validation automatically rolls it back.
+
 CSV imports require `lemma` and `source_name` columns. Optional columns include `part_of_speech`, `definition_en`, `definition_zh`, `ipa`, `example_sentence`, `source_group`, `source_rank`, and `is_high_priority`.
 
 On a fresh install, the Dashboard walks through the three-step setup. The Vocabulary page shows an example row and can save a UTF-8 CSV template with every supported column.

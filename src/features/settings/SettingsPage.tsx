@@ -1,6 +1,6 @@
 import { type FormEvent, useEffect, useState } from 'react'
 import type { AppSettings } from '../../types/models'
-import { saveExport, type ExportKind } from '../../export/desktopExport'
+import { restoreDatabaseBackup, saveExport, type ExportKind } from '../../export/desktopExport'
 import { useDatabaseHealthStore } from './databaseHealthStore'
 import { useSettingsStore } from './settingsStore'
 
@@ -9,6 +9,7 @@ export function SettingsPage() {
   const { settings, loading, saved, error: settingsError, load, save } = useSettingsStore()
   const [draft, setDraft] = useState<AppSettings>(settings)
   const [activeExport, setActiveExport] = useState<ExportKind | null>(null)
+  const [restoring, setRestoring] = useState(false)
   const [exportMessage, setExportMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const statusClass = status === 'healthy' ? 'ok' : status === 'error' ? 'error' : ''
   useEffect(() => { void load() }, [load])
@@ -31,6 +32,21 @@ export function SettingsPage() {
       setExportMessage({ type: 'error', text: exportError instanceof Error ? exportError.message : String(exportError) })
     } finally {
       setActiveExport(null)
+    }
+  }
+  const runRestore = async () => {
+    setRestoring(true)
+    setExportMessage(null)
+    try {
+      const result = await restoreDatabaseBackup()
+      if (result) {
+        setExportMessage({ type: 'success', text: `Restored ${result.wordCount} words and ${result.reviewCount} reviews. Reloading… Safety copy: ${result.rollbackPath}` })
+        window.setTimeout(() => window.location.reload(), 1800)
+      }
+    } catch (restoreError) {
+      setExportMessage({ type: 'error', text: restoreError instanceof Error ? restoreError.message : String(restoreError) })
+    } finally {
+      setRestoring(false)
     }
   }
 
@@ -58,14 +74,15 @@ export function SettingsPage() {
         <h2>Export and backup</h2>
         <p>Save portable copies of your vocabulary and progress, or preserve the complete local database.</p>
         <div className="export-actions">
-          <button className="button" type="button" onClick={() => void runExport('vocabulary-csv')} disabled={activeExport !== null}>Vocabulary CSV</button>
-          <button className="button" type="button" onClick={() => void runExport('vocabulary-json')} disabled={activeExport !== null}>Vocabulary JSON</button>
-          <button className="button" type="button" onClick={() => void runExport('progress-json')} disabled={activeExport !== null}>Progress JSON</button>
-          <button className="button secondary-button" type="button" onClick={() => void runExport('database-backup')} disabled={activeExport !== null}>Full database backup</button>
+          <button className="button" type="button" onClick={() => void runExport('vocabulary-csv')} disabled={activeExport !== null || restoring}>Vocabulary CSV</button>
+          <button className="button" type="button" onClick={() => void runExport('vocabulary-json')} disabled={activeExport !== null || restoring}>Vocabulary JSON</button>
+          <button className="button" type="button" onClick={() => void runExport('progress-json')} disabled={activeExport !== null || restoring}>Progress JSON</button>
+          <button className="button secondary-button" type="button" onClick={() => void runExport('database-backup')} disabled={activeExport !== null || restoring}>Full database backup</button>
+          <button className="button danger-button" type="button" onClick={() => void runRestore()} disabled={activeExport !== null || restoring}>Restore database backup</button>
         </div>
-        {activeExport && <p className="save-message" aria-live="polite">Preparing file…</p>}
+        {(activeExport || restoring) && <p className="save-message" aria-live="polite">{restoring ? 'Validating and restoring backup…' : 'Preparing file…'}</p>}
         {exportMessage && <p className={`notice ${exportMessage.type}`} aria-live="polite">{exportMessage.text}</p>}
-        <small>A database backup contains vocabulary, notes, settings, favorites, and complete review history.</small>
+        <small>A database backup contains vocabulary, notes, settings, favorites, and complete review history. Restore validates the file before replacing any data.</small>
       </div>
       <div className="panel">
         <h2>Database health</h2>

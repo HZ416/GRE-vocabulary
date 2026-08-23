@@ -1,11 +1,18 @@
 import { BaseDirectory } from '@tauri-apps/api/path'
-import { save } from '@tauri-apps/plugin-dialog'
+import { invoke } from '@tauri-apps/api/core'
+import { ask, open, save } from '@tauri-apps/plugin-dialog'
 import { copyFile, writeTextFile } from '@tauri-apps/plugin-fs'
 import { openAppDatabase } from '../db/tauriDatabase'
 import { prettyJson, SqliteDataExportRepository, vocabularyToCsv } from './dataExport'
 import { vocabularyCsvTemplate } from '../import/vocabularyImport'
 
 export type ExportKind = 'vocabulary-csv' | 'vocabulary-json' | 'progress-json' | 'database-backup'
+
+export interface RestoreSummary {
+  wordCount: number
+  reviewCount: number
+  rollbackPath: string
+}
 
 const exportOptions: Record<ExportKind, { fileName: string; extension: string; name: string }> = {
   'vocabulary-csv': { fileName: 'gre-vocabulary.csv', extension: 'csv', name: 'CSV' },
@@ -47,4 +54,23 @@ export async function saveVocabularyCsvTemplate(): Promise<string | null> {
   if (!path) return null
   await writeTextFile(path, `\uFEFF${vocabularyCsvTemplate}`)
   return path
+}
+
+export async function restoreDatabaseBackup(): Promise<RestoreSummary | null> {
+  const path = await open({ multiple: false, directory: false,
+    filters: [{ name: 'SQLite database', extensions: ['db', 'sqlite', 'sqlite3'] }] })
+  if (!path) return null
+  const approved = await ask(
+    'Restoring this backup will replace all current vocabulary, notes, settings, and review progress. A before-restore safety copy will be created automatically. Continue?',
+    { title: 'Restore database backup', kind: 'warning', okLabel: 'Restore backup', cancelLabel: 'Cancel' },
+  )
+  if (!approved) return null
+
+  const database = await openAppDatabase()
+  try {
+    await database.execute('PRAGMA wal_checkpoint(FULL)')
+  } finally {
+    await database.close()
+  }
+  return invoke<RestoreSummary>('restore_database', { sourcePath: path })
 }
