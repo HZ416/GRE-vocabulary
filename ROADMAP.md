@@ -12,12 +12,12 @@
 - [x] Basic learning statistics
 - [x] Editable personal notes on word details
 - [x] Persistent daily limits and answer display preferences
+- [x] Vocabulary CSV/JSON and learning-progress JSON exports
+- [x] Full SQLite database backup from the Settings page
 
 ## Next: smaller improvements
 
 - [ ] First-run empty-state and CSV guidance improvements
-- [ ] Export vocabulary and progress as JSON/CSV
-- [ ] Full SQLite backup download
 
 ## Next: medium improvements
 
