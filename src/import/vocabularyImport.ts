@@ -1,6 +1,13 @@
 import Papa from 'papaparse'
 import { z } from 'zod'
 
+export const vocabularyCsvColumns = [
+  'lemma', 'part_of_speech', 'definition_en', 'definition_zh', 'ipa', 'example_sentence',
+  'source_name', 'source_group', 'source_rank', 'is_high_priority',
+] as const
+
+export const vocabularyCsvTemplate = `${vocabularyCsvColumns.join(',')}\r\n`
+
 const optionalString = z.preprocess(
   (value) => typeof value === 'string' && value.trim() === '' ? undefined : value,
   z.string().trim().optional(),
@@ -118,10 +125,14 @@ export function deduplicateVocabulary(records: VocabularyImportRecord[]): { reco
 
 export function parseVocabularyCsv(csv: string): ParsedVocabularyImport {
   const result = Papa.parse<Record<string, unknown>>(csv, { header: true, skipEmptyLines: 'greedy', transformHeader: (h) => h.trim() })
+  const fields = new Set(result.meta.fields ?? [])
+  const missingFields = ['lemma', 'source_name'].filter((field) => !fields.has(field))
+  if (missingFields.length) throw new Error(`CSV is missing required column${missingFields.length > 1 ? 's' : ''}: ${missingFields.join(', ')}`)
   if (result.errors.length > 0) {
     const first = result.errors[0]
     throw new Error(`CSV row ${Number(first?.row ?? 0) + 2}: ${first?.message ?? 'invalid CSV'}`)
   }
+  if (result.data.length === 0) throw new Error('CSV contains no vocabulary rows')
   const records = result.data.map((row, index): VocabularyImportRecord => {
     const parsed = csvRowSchema.safeParse(row)
     if (!parsed.success) throw new Error(`CSV row ${index + 2}: ${parsed.error.issues[0]?.message ?? 'invalid data'}`)

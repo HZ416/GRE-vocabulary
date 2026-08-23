@@ -3,6 +3,7 @@ import { save } from '@tauri-apps/plugin-dialog'
 import { copyFile, writeTextFile } from '@tauri-apps/plugin-fs'
 import { openAppDatabase } from '../db/tauriDatabase'
 import { prettyJson, SqliteDataExportRepository, vocabularyToCsv } from './dataExport'
+import { vocabularyCsvTemplate } from '../import/vocabularyImport'
 
 export type ExportKind = 'vocabulary-csv' | 'vocabulary-json' | 'progress-json' | 'database-backup'
 
@@ -39,4 +40,11 @@ export async function saveExport(kind: ExportKind): Promise<string | null> {
   } finally {
     if (!databaseClosed) await database.close()
   }
+}
+
+export async function saveVocabularyCsvTemplate(): Promise<string | null> {
+  const path = await save({ defaultPath: 'gre-vocabulary-template.csv', filters: [{ name: 'CSV', extensions: ['csv'] }] })
+  if (!path) return null
+  await writeTextFile(path, `\uFEFF${vocabularyCsvTemplate}`)
+  return path
 }

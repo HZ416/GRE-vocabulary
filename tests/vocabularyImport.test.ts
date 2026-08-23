@@ -49,4 +49,10 @@ equivocal,adj,,,,,powerscore`)
     expect(parsed.records).toHaveLength(1)
     expect(parsed.duplicateRows).toBe(1)
   })
+
+  it('reports missing required columns and empty templates clearly', () => {
+    expect(() => parseVocabularyCsv('lemma,definition_en\nequivocal,ambiguous')).toThrow('CSV is missing required column: source_name')
+    expect(() => parseVocabularyCsv('lemma,source_name\n')).toThrow('CSV contains no vocabulary rows')
+    expect(() => parseVocabularyCsv('definition_en\nambiguous')).toThrow('CSV is missing required columns: lemma, source_name')
+  })
 })

@@ -22,4 +22,6 @@ Use **Settings → Export and backup** to save vocabulary as CSV or JSON, learni
 
 CSV imports require `lemma` and `source_name` columns. Optional columns include `part_of_speech`, `definition_en`, `definition_zh`, `ipa`, `example_sentence`, `source_group`, `source_rank`, and `is_high_priority`.
 
+On a fresh install, the Dashboard walks through the three-step setup. The Vocabulary page shows an example row and can save a UTF-8 CSV template with every supported column.
+
 See [SPEC.md](SPEC.md) for product requirements, [ROADMAP.md](ROADMAP.md) for implementation status, [ARCHITECTURE.md](ARCHITECTURE.md) for engineering decisions, and [DATA_SOURCES.md](DATA_SOURCES.md) for dataset policy.

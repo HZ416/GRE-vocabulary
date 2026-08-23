@@ -14,10 +14,11 @@
 - [x] Persistent daily limits and answer display preferences
 - [x] Vocabulary CSV/JSON and learning-progress JSON exports
 - [x] Full SQLite database backup from the Settings page
+- [x] First-run setup flow, CSV field guidance, and saveable import template
 
 ## Next: smaller improvements
 
-- [ ] First-run empty-state and CSV guidance improvements
+- All planned smaller improvements are complete.
 
 ## Next: medium improvements
 
