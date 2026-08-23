@@ -113,6 +113,12 @@ export class SqliteVocabularyRepository implements VocabularyRepository {
     return { word, sources, studyState }
   }
 
+  async updateNotes(id: string, notes: string | null): Promise<void> {
+    const result = await this.database.execute('UPDATE words SET notes = ?, updated_at = ? WHERE id = ?',
+      [notes, new Date().toISOString(), id])
+    if (result.rowsAffected !== 1) throw new Error('Word not found')
+  }
+
   async import(records: MergedVocabularyRecord[]): Promise<{ inserted: number; updated: number }> {
     let inserted = 0
     let updated = 0

@@ -109,3 +109,12 @@ export interface StatisticsSummary {
   totalReviews: number
   overallAccuracy: number | null
 }
+
+export interface AppSettings {
+  newWordsPerDay: number
+  maxReviewsPerDay: number
+  showEnglish: boolean
+  showChinese: boolean
+  showIpa: boolean
+  showExamples: boolean
+}

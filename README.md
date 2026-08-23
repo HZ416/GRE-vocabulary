@@ -2,7 +2,7 @@
 
 A local-first GRE vocabulary app built with React, TypeScript, Vite, Tauri, and SQLite.
 
-Implemented flows include CSV vocabulary import with progress-safe source merging, vocabulary search and detail pages, and restart-safe FSRS review with daily queues and keyboard shortcuts.
+Implemented flows include CSV vocabulary import with progress-safe source merging, vocabulary search and detail pages with personal notes, restart-safe FSRS review with daily queues and keyboard shortcuts, and persistent study/display preferences.
 
 ## Development
 

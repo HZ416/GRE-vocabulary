@@ -1,4 +1,4 @@
-import type { DashboardSummary, ReviewLog, StatisticsSummary, StudyWord, Tag, UserWordState, VocabularyListItem, Word, WordDetail, WordSource } from '../types/models'
+import type { AppSettings, DashboardSummary, ReviewLog, StatisticsSummary, StudyWord, Tag, UserWordState, VocabularyListItem, Word, WordDetail, WordSource } from '../types/models'
 import type { MergedVocabularyRecord } from '../import/vocabularyImport'
 
 export interface WordRepository {
@@ -31,12 +31,18 @@ export interface VocabularyRepository extends WordRepository {
   list(query?: string): Promise<VocabularyListItem[]>
   listFlagged(flag: 'favorite' | 'difficult'): Promise<VocabularyListItem[]>
   getDetail(id: string): Promise<WordDetail | null>
+  updateNotes(id: string, notes: string | null): Promise<void>
   import(records: MergedVocabularyRecord[]): Promise<{ inserted: number; updated: number }>
 }
 
 export interface ProgressRepository {
   getDashboard(now: Date): Promise<DashboardSummary>
   getStatistics(now: Date): Promise<StatisticsSummary>
+}
+
+export interface SettingsRepository {
+  get(): Promise<AppSettings>
+  save(settings: AppSettings): Promise<AppSettings>
 }
 
 export interface StudyRepository {

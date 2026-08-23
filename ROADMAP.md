@@ -10,11 +10,11 @@
 - [x] Dashboard with new, due, overdue, and vocabulary progress counts
 - [x] Favorites and difficult-word lists
 - [x] Basic learning statistics
+- [x] Editable personal notes on word details
+- [x] Persistent daily limits and answer display preferences
 
 ## Next: smaller improvements
 
-- [ ] Editable notes on the word detail page
-- [ ] Persistent daily limits and display preferences
 - [ ] First-run empty-state and CSV guidance improvements
 - [ ] Export vocabulary and progress as JSON/CSV
 - [ ] Full SQLite backup download

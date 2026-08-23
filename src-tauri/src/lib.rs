@@ -12,6 +12,11 @@ pub fn run() {
         description: "persist complete FSRS card state",
         sql: include_str!("../../migrations/002_fsrs_card_state.sql"),
         kind: MigrationKind::Up,
+    }, Migration {
+        version: 3,
+        description: "persistent application settings",
+        sql: include_str!("../../migrations/003_app_settings.sql"),
+        kind: MigrationKind::Up,
     }];
 
     tauri::Builder::default()

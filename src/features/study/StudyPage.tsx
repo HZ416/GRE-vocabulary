@@ -8,7 +8,7 @@ const ratingButtons: { rating: StudyRating; label: string; key: string }[] = [
 ]
 
 export function StudyPage() {
-  const { queue, loading, error, load, rate, toggleFavorite, toggleDifficult } = useStudyStore()
+  const { queue, loading, error, settings, load, rate, toggleFavorite, toggleDifficult } = useStudyStore()
   const [revealed, setRevealed] = useState(false)
   const startedAt = useRef(Date.now())
   const word = queue[0]
@@ -45,9 +45,9 @@ export function StudyPage() {
         <button aria-label="Toggle favorite" className={word.studyState?.isFavorite ? 'active' : ''} onClick={() => void toggleFavorite(word.id)}>F · Favorite</button>
         <button aria-label="Toggle difficult" className={word.studyState?.isDifficult ? 'active' : ''} onClick={() => void toggleDifficult(word.id)}>D · Difficult</button>
       </div>
-      <div className="prompt"><h1>{word.lemma}</h1>{word.ipa && <p>{word.ipa}</p>}</div>
+      <div className="prompt"><h1>{word.lemma}</h1>{settings.showIpa && word.ipa && <p>{word.ipa}</p>}</div>
       <div className={`answer ${revealed ? 'revealed' : ''}`}>
-        {revealed ? <><span>{word.partOfSpeech || 'word'}</span><h2>{word.definitionEn || 'English definition not provided'}</h2><p>{word.definitionZh || '中文释义未提供'}</p>{word.exampleSentence && <blockquote>{word.exampleSentence}</blockquote>}</> :
+        {revealed ? <><span>{word.partOfSpeech || 'word'}</span>{settings.showEnglish && <h2>{word.definitionEn || 'English definition not provided'}</h2>}{settings.showChinese && <p>{word.definitionZh || '中文释义未提供'}</p>}{settings.showExamples && word.exampleSentence && <blockquote>{word.exampleSentence}</blockquote>}</> :
           <button className="show-answer" type="button" onClick={() => setRevealed(true)}>Show answer <kbd>Space</kbd></button>}
       </div>
       <div className="rating-row">

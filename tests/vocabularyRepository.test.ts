@@ -48,4 +48,14 @@ EQUIVOCAL,replacement must not win,模棱两可的,barrons`)
     expect(detail?.studyState).toMatchObject({ status: 'review', totalReviews: 7, correctReviews: 6, nextReviewAt: '2026-09-01T00:00:00.000Z' })
     expect(detail?.sources.map(({ sourceName }) => sourceName)).toEqual(['barrons', 'gregmat'])
   })
+
+  it('saves and clears personal notes on a word', async () => {
+    await repository.import(parseVocabularyCsv(`lemma,source_name
+equivocal,gregmat`).records)
+    const word = await repository.findByLemma('equivocal')
+    await repository.updateNotes(word!.id, 'Distinguish from evasive')
+    expect((await repository.findById(word!.id))?.notes).toBe('Distinguish from evasive')
+    await repository.updateNotes(word!.id, null)
+    expect((await repository.findById(word!.id))?.notes).toBeNull()
+  })
 })

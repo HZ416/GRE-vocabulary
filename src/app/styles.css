@@ -98,6 +98,19 @@ kbd { margin-left: 9px; padding: 2px 6px; font: 11px ui-monospace, monospace; bo
 .lifetime-panel > div { display: flex; align-items: baseline; gap: 18px; }
 .lifetime-panel strong { font: 600 38px Georgia, serif; }
 .lifetime-panel span { color: #68756f; }
+.settings-form { display: grid; gap: 16px; }
+.settings-form > label, .settings-form fieldset label { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.settings-form label span { display: grid; gap: 2px; }
+.settings-form small { color: #7a8781; font-size: 11px; }
+.settings-form input[type="number"] { width: 110px; padding: 8px 10px; border: 1px solid #ccd5d0; border-radius: 7px; font: inherit; }
+.settings-form input[type="checkbox"] { width: 18px; height: 18px; accent-color: #1d5b47; }
+.settings-form fieldset { display: grid; gap: 13px; margin: 4px 0; padding: 18px; border: 1px solid #e0e6e2; border-radius: 9px; }
+.settings-form legend { padding: 0 7px; color: #65726c; }
+.settings-form .button { width: max-content; }
+.save-message { margin: 0; color: #218558; }
+.notes-panel textarea { width: 100%; min-height: 130px; resize: vertical; padding: 12px; color: inherit; background: transparent; border: 1px solid #ccd5d0; border-radius: 8px; font: inherit; line-height: 1.5; }
+.notes-panel > div { display: flex; align-items: center; gap: 13px; margin-top: 12px; }
+.notes-panel > div span { color: #218558; }
 
 @media (prefers-color-scheme: dark) {
   :root { color: #e9eeeb; background: #111714; }
@@ -115,4 +128,6 @@ kbd { margin-left: 9px; padding: 2px 6px; font: 11px ui-monospace, monospace; bo
   .summary-grid > div, .stats-grid article { background: #18211d; border-color: #29352f; }
   .summary-grid .summary-total { background: #1d5b47; }
   .progress-track { background: #2a3731; }
+  .settings-form input[type="number"], .notes-panel textarea { color: #e9eeeb; background: #111714; border-color: #33423b; }
+  .settings-form fieldset { border-color: #33423b; }
 }

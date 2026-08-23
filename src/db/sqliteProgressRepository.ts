@@ -11,6 +11,7 @@ interface DashboardRow {
   learning: number
   in_review: number
   mastered: number
+  new_words_limit: number
 }
 
 interface StatisticsRow {
@@ -49,10 +50,11 @@ export class SqliteProgressRepository implements ProgressRepository {
       (SELECT COUNT(*) FROM user_word_state WHERE total_reviews > 0) AS introduced,
       (SELECT COUNT(*) FROM user_word_state WHERE status = 'learning') AS learning,
       (SELECT COUNT(*) FROM user_word_state WHERE status = 'review') AS in_review,
-      (SELECT COUNT(*) FROM user_word_state WHERE status = 'mastered') AS mastered`,
+      (SELECT COUNT(*) FROM user_word_state WHERE status = 'mastered') AS mastered,
+      (SELECT new_words_per_day FROM app_settings WHERE id = 1) AS new_words_limit`,
     [start.toISOString(), now.toISOString(), start.toISOString()]))[0]
     if (!row) throw new Error('Unable to calculate dashboard')
-    const newWords = Math.min(row.unseen_words, 20)
+    const newWords = Math.min(row.unseen_words, row.new_words_limit)
     return {
       newWords, due: row.due, overdue: row.overdue, total: newWords + row.due + row.overdue,
       totalWords: row.total_words, introduced: row.introduced, learning: row.learning,
