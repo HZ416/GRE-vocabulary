@@ -52,6 +52,7 @@ interface ReviewRow {
 }
 
 interface SettingsRow {
+  interface_language: AppSettings['interfaceLanguage'];
   new_words_per_day: number; max_reviews_per_day: number; show_english: number
   show_chinese: number; show_ipa: number; show_examples: number
 }
@@ -110,6 +111,7 @@ export class SqliteDataExportRepository {
     const logs = await this.database.select<ReviewRow>('SELECT * FROM review_logs ORDER BY reviewed_at, id')
     const settingsRow = (await this.database.select<SettingsRow>('SELECT * FROM app_settings WHERE id = 1'))[0]
     const settings = settingsRow ? {
+      interfaceLanguage: settingsRow.interface_language,
       newWordsPerDay: settingsRow.new_words_per_day, maxReviewsPerDay: settingsRow.max_reviews_per_day,
       showEnglish: Boolean(settingsRow.show_english), showChinese: Boolean(settingsRow.show_chinese),
       showIpa: Boolean(settingsRow.show_ipa), showExamples: Boolean(settingsRow.show_examples),

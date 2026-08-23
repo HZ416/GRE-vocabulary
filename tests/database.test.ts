@@ -25,7 +25,7 @@ describe('database initialization', () => {
     await runMigrations(database)
     await runMigrations(database)
     const versions = await database.select<{ version: number }>('SELECT version FROM schema_migrations')
-    expect(versions).toEqual([{ version: 1 }, { version: 2 }, { version: 3 }])
+    expect(versions).toEqual([{ version: 1 }, { version: 2 }, { version: 3 }, { version: 4 }])
     await expect(checkDatabaseHealth(database)).resolves.toMatchObject({ ok: true })
   })
 

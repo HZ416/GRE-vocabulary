@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => ({
   progress: { dashboard: null as null | Record<string, number>, loading: false, error: null as string | null },
   vocabulary: { words: [] as Array<Record<string, unknown>>, loading: false, error: null as string | null, importMessage: null as string | null },
   settings: {
-    settings: { newWordsPerDay: 20, maxReviewsPerDay: 200, showEnglish: true,
+    settings: { interfaceLanguage: 'en' as const, newWordsPerDay: 20, maxReviewsPerDay: 200, showEnglish: true,
       showChinese: true, showIpa: true, showExamples: true },
     loading: false, saved: false, error: null as string | null,
   },

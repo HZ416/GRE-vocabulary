@@ -3,8 +3,10 @@ import type { AppSettings } from '../../types/models'
 import { restoreDatabaseBackup, saveExport, type ExportKind } from '../../export/desktopExport'
 import { useDatabaseHealthStore } from './databaseHealthStore'
 import { useSettingsStore } from './settingsStore'
+import { useI18n } from '../../i18n'
 
 export function SettingsPage() {
+  const { t } = useI18n()
   const { status, health, error, check } = useDatabaseHealthStore()
   const { settings, loading, saved, error: settingsError, load, save } = useSettingsStore()
   const [draft, setDraft] = useState<AppSettings>(settings)
@@ -27,7 +29,7 @@ export function SettingsPage() {
     setExportMessage(null)
     try {
       const path = await saveExport(kind)
-      if (path) setExportMessage({ type: 'success', text: `Saved to ${path}` })
+      if (path) setExportMessage({ type: 'success', text: t('Saved to {path}', { path }) })
     } catch (exportError) {
       setExportMessage({ type: 'error', text: exportError instanceof Error ? exportError.message : String(exportError) })
     } finally {
@@ -40,7 +42,7 @@ export function SettingsPage() {
     try {
       const result = await restoreDatabaseBackup()
       if (result) {
-        setExportMessage({ type: 'success', text: `Restored ${result.wordCount} words and ${result.reviewCount} reviews. Reloading… Safety copy: ${result.rollbackPath}` })
+        setExportMessage({ type: 'success', text: t('Restored {words} words and {reviews} reviews. Reloading… Safety copy: {path}', { words: result.wordCount, reviews: result.reviewCount, path: result.rollbackPath }) })
         window.setTimeout(() => window.location.reload(), 1800)
       }
     } catch (restoreError) {
@@ -53,50 +55,51 @@ export function SettingsPage() {
   return (
     <section>
       <header className="page-header">
-        <h1>Settings</h1>
-        <p>Application preferences and local database diagnostics.</p>
+        <h1>{t('Settings')}</h1>
+        <p>{t('Application preferences and local database diagnostics.')}</p>
       </header>
       <form className="panel settings-form" onSubmit={submit}>
-        <h2>Study preferences</h2>
-        <label><span>New words per day<small>0–200</small></span><input type="number" min="0" max="200" value={draft.newWordsPerDay} onChange={(event) => setNumber('newWordsPerDay', event.target.value)} /></label>
-        <label><span>Maximum reviews per day<small>1–1000</small></span><input type="number" min="1" max="1000" value={draft.maxReviewsPerDay} onChange={(event) => setNumber('maxReviewsPerDay', event.target.value)} /></label>
-        <fieldset><legend>Answer content</legend>
-          <label><span>English definition</span><input type="checkbox" checked={draft.showEnglish} onChange={(event) => setBoolean('showEnglish', event.target.checked)} /></label>
-          <label><span>Chinese definition</span><input type="checkbox" checked={draft.showChinese} onChange={(event) => setBoolean('showChinese', event.target.checked)} /></label>
-          <label><span>IPA pronunciation</span><input type="checkbox" checked={draft.showIpa} onChange={(event) => setBoolean('showIpa', event.target.checked)} /></label>
-          <label><span>Example sentences</span><input type="checkbox" checked={draft.showExamples} onChange={(event) => setBoolean('showExamples', event.target.checked)} /></label>
+        <h2>{t('Study preferences')}</h2>
+        <label><span>{t('Interface language')}</span><select value={draft.interfaceLanguage} onChange={(event) => setDraft((current) => ({ ...current, interfaceLanguage: event.target.value as AppSettings['interfaceLanguage'] }))}><option value="en">English</option><option value="zh">中文</option></select></label>
+        <label><span>{t('New words per day')}<small>0–200</small></span><input type="number" min="0" max="200" value={draft.newWordsPerDay} onChange={(event) => setNumber('newWordsPerDay', event.target.value)} /></label>
+        <label><span>{t('Maximum reviews per day')}<small>1–1000</small></span><input type="number" min="1" max="1000" value={draft.maxReviewsPerDay} onChange={(event) => setNumber('maxReviewsPerDay', event.target.value)} /></label>
+        <fieldset><legend>{t('Answer content')}</legend>
+          <label><span>{t('English definition')}</span><input type="checkbox" checked={draft.showEnglish} onChange={(event) => setBoolean('showEnglish', event.target.checked)} /></label>
+          <label><span>{t('Chinese definition')}</span><input type="checkbox" checked={draft.showChinese} onChange={(event) => setBoolean('showChinese', event.target.checked)} /></label>
+          <label><span>{t('IPA pronunciation')}</span><input type="checkbox" checked={draft.showIpa} onChange={(event) => setBoolean('showIpa', event.target.checked)} /></label>
+          <label><span>{t('Example sentences')}</span><input type="checkbox" checked={draft.showExamples} onChange={(event) => setBoolean('showExamples', event.target.checked)} /></label>
         </fieldset>
         {settingsError && <p className="notice error">{settingsError}</p>}
-        {saved && <p className="save-message" aria-live="polite">Settings saved locally.</p>}
-        <button className="button" type="submit" disabled={loading}>Save preferences</button>
+        {saved && <p className="save-message" aria-live="polite">{t('Settings saved locally.')}</p>}
+        <button className="button" type="submit" disabled={loading}>{t('Save preferences')}</button>
       </form>
       <div className="panel export-panel">
-        <h2>Export and backup</h2>
-        <p>Save portable copies of your vocabulary and progress, or preserve the complete local database.</p>
+        <h2>{t('Export and backup')}</h2>
+        <p>{t('Save portable copies of your vocabulary and progress, or preserve the complete local database.')}</p>
         <div className="export-actions">
-          <button className="button" type="button" onClick={() => void runExport('vocabulary-csv')} disabled={activeExport !== null || restoring}>Vocabulary CSV</button>
-          <button className="button" type="button" onClick={() => void runExport('vocabulary-json')} disabled={activeExport !== null || restoring}>Vocabulary JSON</button>
-          <button className="button" type="button" onClick={() => void runExport('progress-json')} disabled={activeExport !== null || restoring}>Progress JSON</button>
-          <button className="button secondary-button" type="button" onClick={() => void runExport('database-backup')} disabled={activeExport !== null || restoring}>Full database backup</button>
-          <button className="button danger-button" type="button" onClick={() => void runRestore()} disabled={activeExport !== null || restoring}>Restore database backup</button>
+          <button className="button" type="button" onClick={() => void runExport('vocabulary-csv')} disabled={activeExport !== null || restoring}>{t('Vocabulary CSV')}</button>
+          <button className="button" type="button" onClick={() => void runExport('vocabulary-json')} disabled={activeExport !== null || restoring}>{t('Vocabulary JSON')}</button>
+          <button className="button" type="button" onClick={() => void runExport('progress-json')} disabled={activeExport !== null || restoring}>{t('Progress JSON')}</button>
+          <button className="button secondary-button" type="button" onClick={() => void runExport('database-backup')} disabled={activeExport !== null || restoring}>{t('Full database backup')}</button>
+          <button className="button danger-button" type="button" onClick={() => void runRestore()} disabled={activeExport !== null || restoring}>{t('Restore database backup')}</button>
         </div>
-        {(activeExport || restoring) && <p className="save-message" aria-live="polite">{restoring ? 'Validating and restoring backup…' : 'Preparing file…'}</p>}
+        {(activeExport || restoring) && <p className="save-message" aria-live="polite">{t(restoring ? 'Validating and restoring backup…' : 'Preparing file…')}</p>}
         {exportMessage && <p className={`notice ${exportMessage.type}`} aria-live="polite">{exportMessage.text}</p>}
-        <small>A database backup contains vocabulary, notes, settings, favorites, and complete review history. Restore validates the file before replacing any data.</small>
+        <small>{t('A database backup contains vocabulary, notes, settings, favorites, and complete review history. Restore validates the file before replacing any data.')}</small>
       </div>
       <div className="panel">
-        <h2>Database health</h2>
+        <h2>{t('Database health')}</h2>
         <div className={`status ${statusClass}`} aria-live="polite">
           <span className="status-dot" aria-hidden="true" />
           <span>
-            {status === 'idle' && 'Not checked'}
-            {status === 'checking' && 'Checking local database…'}
-            {status === 'healthy' && `Healthy · SQLite ${health?.sqliteVersion}`}
-            {status === 'error' && `Unavailable · ${error}`}
+            {status === 'idle' && t('Not checked')}
+            {status === 'checking' && t('Checking local database…')}
+            {status === 'healthy' && t('Healthy · SQLite {version}', { version: health?.sqliteVersion ?? '' })}
+            {status === 'error' && t('Unavailable · {error}', { error: error ?? '' })}
           </span>
         </div>
         <button className="button" type="button" onClick={() => void check()} disabled={status === 'checking'}>
-          Run health check
+          {t('Run health check')}
         </button>
       </div>
     </section>

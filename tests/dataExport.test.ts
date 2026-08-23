@@ -49,11 +49,11 @@ equivocal,"open, or ""uncertain""",模棱两可的,barrons,book`).records)
 equivocal,open to multiple interpretations,gregmat`).records)
     const word = await vocabulary.findByLemma('equivocal')
     await new SqliteStudyRepository(database).rate(word!.id, 3, new Date('2026-08-23T10:00:00.000Z'), 900)
-    await new SqliteSettingsRepository(database).save({ newWordsPerDay: 12, maxReviewsPerDay: 80,
+    await new SqliteSettingsRepository(database).save({ interfaceLanguage: 'zh', newWordsPerDay: 12, maxReviewsPerDay: 80,
       showEnglish: true, showChinese: false, showIpa: true, showExamples: false })
 
     const data = await exports.progress(new Date('2026-08-23T11:00:00.000Z'))
-    expect(data.settings).toEqual({ newWordsPerDay: 12, maxReviewsPerDay: 80,
+    expect(data.settings).toEqual({ interfaceLanguage: 'zh', newWordsPerDay: 12, maxReviewsPerDay: 80,
       showEnglish: true, showChinese: false, showIpa: true, showExamples: false })
     expect(data.wordStates[0]).toMatchObject({ wordId: word!.id, totalReviews: 1, fsrsReps: 1 })
     expect(data.wordStates[0]?.fsrsDue).not.toBeNull()

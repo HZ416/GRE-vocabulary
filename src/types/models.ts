@@ -111,6 +111,7 @@ export interface StatisticsSummary {
 }
 
 export interface AppSettings {
+  interfaceLanguage: 'en' | 'zh'
   newWordsPerDay: number
   maxReviewsPerDay: number
   showEnglish: boolean

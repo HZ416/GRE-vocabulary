@@ -2,7 +2,7 @@
 
 A local-first GRE vocabulary app built with React, TypeScript, Vite, Tauri, and SQLite.
 
-Implemented flows include CSV vocabulary import with progress-safe source merging, vocabulary search and detail pages with personal notes, restart-safe FSRS review with daily queues and keyboard shortcuts, persistent study/display preferences, portable vocabulary/progress exports, and full SQLite backups.
+Implemented flows include CSV vocabulary import with progress-safe source merging, vocabulary search and detail pages with personal notes, restart-safe FSRS review with daily queues and keyboard shortcuts, persistent study/display preferences, English/Chinese interface switching, portable vocabulary/progress exports, and full SQLite backups.
 
 ## Development
 
@@ -18,6 +18,8 @@ npm run tauri dev
 ```
 
 The SQLite database is stored in the platform-specific application data directory. Open **Settings** and run the database health check to verify the desktop connection.
+
+Choose **Settings → Interface language** to switch the main interface between English and Chinese. The selection is stored in the local SQLite database and is included in progress exports and full backups.
 
 Use **Settings → Export and backup** to save vocabulary as CSV or JSON, learning progress as JSON, or a complete `.db` backup. CSV and JSON are portable data exports; the `.db` file is the complete local snapshot, including notes, settings, flags, FSRS state, and review history.
 

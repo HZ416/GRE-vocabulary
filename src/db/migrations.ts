@@ -1,6 +1,7 @@
 import initialMigration from '../../migrations/001_initial.sql?raw'
 import fsrsCardStateMigration from '../../migrations/002_fsrs_card_state.sql?raw'
 import appSettingsMigration from '../../migrations/003_app_settings.sql?raw'
+import interfaceLanguageMigration from '../../migrations/004_interface_language.sql?raw'
 import type { DatabaseConnection } from './types'
 
 export interface Migration { version: number; description: string; sql: string }
@@ -9,6 +10,7 @@ export const migrations: Migration[] = [
   { version: 1, description: 'initial schema', sql: initialMigration },
   { version: 2, description: 'persist complete FSRS card state', sql: fsrsCardStateMigration },
   { version: 3, description: 'persistent application settings', sql: appSettingsMigration },
+  { version: 4, description: 'persistent interface language', sql: interfaceLanguageMigration },
 ]
 
 export async function runMigrations(database: DatabaseConnection): Promise<void> {

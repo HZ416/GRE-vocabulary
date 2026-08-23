@@ -21,6 +21,11 @@ pub fn run() {
         description: "persistent application settings",
         sql: include_str!("../../migrations/003_app_settings.sql"),
         kind: MigrationKind::Up,
+    }, Migration {
+        version: 4,
+        description: "persistent interface language",
+        sql: include_str!("../../migrations/004_interface_language.sql"),
+        kind: MigrationKind::Up,
     }];
 
     tauri::Builder::default()

@@ -24,6 +24,7 @@ fn file_backed_restart_and_forward_migrations_preserve_progress() {
         database = connect(&path, false).await;
         database.execute(include_str!("../../migrations/002_fsrs_card_state.sql")).await.unwrap();
         database.execute(include_str!("../../migrations/003_app_settings.sql")).await.unwrap();
+        database.execute(include_str!("../../migrations/004_interface_language.sql")).await.unwrap();
         database.execute("UPDATE user_word_state SET fsrs_state = 2, fsrs_due = next_review_at, fsrs_reps = 7 WHERE word_id = 'word-1'").await.unwrap();
         database.close().await.unwrap();
 
@@ -34,7 +35,9 @@ fn file_backed_restart_and_forward_migrations_preserve_progress() {
         assert_eq!(row, ("equivocal".into(), "keep me".into(), 7, 7, "2026-09-01T00:00:00Z".into()));
         let review_count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM review_logs").fetch_one(&mut database).await.unwrap();
         let settings_count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM app_settings WHERE id = 1").fetch_one(&mut database).await.unwrap();
+        let interface_language: String = sqlx::query_scalar("SELECT interface_language FROM app_settings WHERE id = 1").fetch_one(&mut database).await.unwrap();
         assert_eq!((review_count, settings_count), (1, 1));
+        assert_eq!(interface_language, "en");
         database.close().await.unwrap();
         fs::remove_file(path).unwrap();
     });

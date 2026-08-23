@@ -16,6 +16,10 @@ Feature code depends on repository interfaces in `src/services/repositories.ts`,
 
 Zod validates data returned across untyped boundaries such as SQLite health queries. TypeScript interfaces use application-style camelCase while adapters own database row mapping.
 
+## Interface language is local state
+
+English copy is the translation key and fallback; a compact in-app dictionary supplies Chinese copy without a runtime service or network request. Migration 004 persists the selected language in `app_settings`, so it follows the same backup and restore path as other preferences.
+
 ## Vocabulary updates are progress-safe
 
 CSV rows are normalized and deduplicated before persistence. Imports only fill missing word metadata, merge sources using a unique `(word_id, source_name)` constraint, and recalculate priority from persisted sources. They never update notes or study-state tables.

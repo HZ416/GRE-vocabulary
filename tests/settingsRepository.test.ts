@@ -17,12 +17,12 @@ describe('persistent application settings', () => {
 
   it('loads defaults, validates changes, and survives database reinitialization', async () => {
     const repository = new SqliteSettingsRepository(database)
-    await expect(repository.get()).resolves.toMatchObject({ newWordsPerDay: 20, maxReviewsPerDay: 200 })
+    await expect(repository.get()).resolves.toMatchObject({ interfaceLanguage: 'en', newWordsPerDay: 20, maxReviewsPerDay: 200 })
     const updated = await repository.save({
-      newWordsPerDay: 7, maxReviewsPerDay: 80, showEnglish: false,
+      interfaceLanguage: 'zh', newWordsPerDay: 7, maxReviewsPerDay: 80, showEnglish: false,
       showChinese: true, showIpa: false, showExamples: true,
     })
-    expect(updated).toMatchObject({ newWordsPerDay: 7, maxReviewsPerDay: 80, showEnglish: false })
+    expect(updated).toMatchObject({ interfaceLanguage: 'zh', newWordsPerDay: 7, maxReviewsPerDay: 80, showEnglish: false })
     const snapshot = database.export()
     await database.close()
     database = await createSqliteTestDatabase(snapshot)
@@ -32,11 +32,11 @@ describe('persistent application settings', () => {
   it('rejects unsafe limits and applies the new-word limit to Dashboard', async () => {
     const settings = new SqliteSettingsRepository(database)
     await expect(settings.save({
-      newWordsPerDay: 500, maxReviewsPerDay: 200, showEnglish: true,
+      interfaceLanguage: 'en', newWordsPerDay: 500, maxReviewsPerDay: 200, showEnglish: true,
       showChinese: true, showIpa: true, showExamples: true,
     })).rejects.toThrow()
     await settings.save({
-      newWordsPerDay: 1, maxReviewsPerDay: 200, showEnglish: true,
+      interfaceLanguage: 'en', newWordsPerDay: 1, maxReviewsPerDay: 200, showEnglish: true,
       showChinese: true, showIpa: true, showExamples: true,
     })
     const vocabulary = new SqliteVocabularyRepository(database)

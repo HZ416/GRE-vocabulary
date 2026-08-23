@@ -5,7 +5,7 @@ use tauri::Manager;
 
 const DATABASE_NAME: &str = "gre-vocabulary.db";
 const ROLLBACK_NAME: &str = "gre-vocabulary-before-restore.db";
-const SUPPORTED_SCHEMA_VERSION: i64 = 3;
+const SUPPORTED_SCHEMA_VERSION: i64 = 4;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -36,7 +36,7 @@ async fn validate_database(path: &Path) -> Result<(i64, i64), String> {
             ("word_sources", &["word_id", "source_name"]),
             ("user_word_state", &["word_id", "status", "fsrs_due", "fsrs_state", "fsrs_reps"]),
             ("review_logs", &["id", "word_id", "reviewed_at", "rating"]),
-            ("app_settings", &["id", "new_words_per_day", "max_reviews_per_day"]),
+            ("app_settings", &["id", "new_words_per_day", "max_reviews_per_day", "interface_language"]),
             ("_sqlx_migrations", &["version", "success"]),
         ];
         for (table, columns) in required_columns {
@@ -60,7 +60,7 @@ async fn validate_database(path: &Path) -> Result<(i64, i64), String> {
         if version.unwrap_or(0) > SUPPORTED_SCHEMA_VERSION {
             return Err(format!("This backup was created by a newer app version (schema {})", version.unwrap_or(0)));
         }
-        let migration_count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM _sqlx_migrations WHERE success = 1 AND version BETWEEN 1 AND 3")
+        let migration_count: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM _sqlx_migrations WHERE success = 1 AND version BETWEEN 1 AND 4")
             .fetch_one(&mut connection).await.map_err(|error| format!("Cannot read backup migrations: {error}"))?;
         if version != Some(SUPPORTED_SCHEMA_VERSION) || migration_count != SUPPORTED_SCHEMA_VERSION {
             return Err("The backup schema is incomplete or unsupported".into());
@@ -142,8 +142,9 @@ mod tests {
         connection.execute(include_str!("../../migrations/001_initial.sql")).await.unwrap();
         connection.execute(include_str!("../../migrations/002_fsrs_card_state.sql")).await.unwrap();
         connection.execute(include_str!("../../migrations/003_app_settings.sql")).await.unwrap();
+        connection.execute(include_str!("../../migrations/004_interface_language.sql")).await.unwrap();
         connection.execute("CREATE TABLE _sqlx_migrations (version BIGINT PRIMARY KEY, description TEXT NOT NULL, installed_on TEXT NOT NULL, success BOOLEAN NOT NULL, checksum BLOB NOT NULL, execution_time BIGINT NOT NULL)").await.unwrap();
-        connection.execute("INSERT INTO _sqlx_migrations VALUES (1, 'one', '', 1, X'00', 0), (2, 'two', '', 1, X'00', 0), (3, 'three', '', 1, X'00', 0)").await.unwrap();
+        connection.execute("INSERT INTO _sqlx_migrations VALUES (1, 'one', '', 1, X'00', 0), (2, 'two', '', 1, X'00', 0), (3, 'three', '', 1, X'00', 0), (4, 'four', '', 1, X'00', 0)").await.unwrap();
         connection.close().await.unwrap();
     }
 

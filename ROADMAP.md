@@ -21,6 +21,7 @@
 - [x] GitHub Actions builds for macOS Apple Silicon, macOS Intel, and Windows x64
 - [x] Restrictive Content Security Policy and command-level Tauri permissions
 - [x] Import, search, and queue performance tests with 20,000 words
+- [x] Localized English and Chinese interface copy with a persistent language setting
 
 ## Next: smaller improvements
 
@@ -29,7 +30,6 @@
 ## Next: medium improvements
 
 - [ ] Playwright end-to-end review flow
-- [ ] Localized English and Chinese interface copy
 
 ## Release readiness
 
