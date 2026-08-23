@@ -4,7 +4,6 @@
   "description": "Default desktop permissions",
   "windows": ["main"],
   "permissions": [
-    "core:default",
     "dialog:allow-save",
     "dialog:allow-open",
     "dialog:allow-ask",
@@ -13,7 +12,7 @@
       "identifier": "fs:allow-copy-file",
       "allow": [{ "path": "$APPCONFIG/gre-vocabulary.db" }]
     },
-    "sql:default",
+    "sql:allow-load",
     "sql:allow-execute",
     "sql:allow-select",
     "sql:allow-close"

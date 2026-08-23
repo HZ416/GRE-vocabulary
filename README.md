@@ -11,6 +11,7 @@ Prerequisites: Node.js 24 LTS and the stable Rust toolchain.
 ```sh
 npm install
 npm run test
+npm run test:performance
 npm run typecheck
 npm run lint
 npm run tauri dev
@@ -25,5 +26,7 @@ Use **Restore database backup** to replace local data from a compatible SQLite b
 CSV imports require `lemma` and `source_name` columns. Optional columns include `part_of_speech`, `definition_en`, `definition_zh`, `ipa`, `example_sentence`, `source_group`, `source_rank`, and `is_high_priority`.
 
 On a fresh install, the Dashboard walks through the three-step setup. The Vocabulary page shows an example row and can save a UTF-8 CSV template with every supported column.
+
+The regular suite includes repository, FSRS persistence, backup validation, real file-backed migration, and core React page tests. The separate performance suite exercises import, search, and daily queue creation with 20,000 words. GitHub Actions validates the project and builds unsigned installers for macOS Apple Silicon, macOS Intel, and Windows x64.
 
 See [SPEC.md](SPEC.md) for product requirements, [ROADMAP.md](ROADMAP.md) for implementation status, [ARCHITECTURE.md](ARCHITECTURE.md) for engineering decisions, and [DATA_SOURCES.md](DATA_SOURCES.md) for dataset policy.

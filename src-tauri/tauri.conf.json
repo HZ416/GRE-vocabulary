@@ -19,8 +19,20 @@
         "minHeight": 640
       }
     ],
-    "security": { "csp": null }
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "connect-src": "ipc: http://ipc.localhost",
+        "img-src": "'self' data:",
+        "style-src": "'self' 'unsafe-inline'"
+      },
+      "devCsp": {
+        "default-src": "'self' http://localhost:1420",
+        "connect-src": "ipc: http://ipc.localhost http://localhost:1420 ws://localhost:1420",
+        "img-src": "'self' data:",
+        "style-src": "'self' 'unsafe-inline'"
+      }
+    }
   },
   "bundle": { "active": true, "targets": "all" }
 }
-

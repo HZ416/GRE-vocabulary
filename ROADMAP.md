@@ -16,6 +16,11 @@
 - [x] Full SQLite database backup from the Settings page
 - [x] First-run setup flow, CSV field guidance, and saveable import template
 - [x] Validated SQLite restore with confirmation and automatic rollback copy
+- [x] Real file-backed SQLite restart and forward-migration tests
+- [x] React Testing Library coverage for core pages
+- [x] GitHub Actions builds for macOS Apple Silicon, macOS Intel, and Windows x64
+- [x] Restrictive Content Security Policy and command-level Tauri permissions
+- [x] Import, search, and queue performance tests with 20,000 words
 
 ## Next: smaller improvements
 
@@ -23,16 +28,11 @@
 
 ## Next: medium improvements
 
-- [ ] Real file-backed SQLite restart and migration tests
-- [ ] React Testing Library coverage for core pages
 - [ ] Playwright end-to-end review flow
 - [ ] Localized English and Chinese interface copy
 
 ## Release readiness
 
 - [ ] Licensed 800–1200-word Core GRE deck with documented sources
-- [ ] GitHub Actions builds for macOS Apple Silicon, macOS Intel, and Windows x64
 - [ ] macOS code signing and notarization
 - [ ] Windows installer signing
-- [ ] Restrictive Content Security Policy and narrower Tauri permissions
-- [ ] Import, search, and queue performance tests with 20,000 words

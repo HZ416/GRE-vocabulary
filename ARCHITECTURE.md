@@ -27,3 +27,7 @@ The scheduler is deterministic and isolated in `src/fsrs/`. Every rating stores 
 ## Database restore fails safely
 
 Restore is handled by a dedicated Rust command after frontend SQL connections are checkpointed and closed. A candidate must pass SQLite integrity, schema, migration, settings, and foreign-key checks. The active database is copied to `gre-vocabulary-before-restore.db` before replacement; the copied candidate is validated again and the original is recovered if that final check fails.
+
+## Desktop privileges are explicit
+
+The production WebView CSP permits only bundled content and Tauri IPC. Its capability grants individual SQL load/select/execute/close commands, scoped file export/copy operations, and the specific dialog commands used by the interface. Cross-platform CI builds the same configuration for Apple Silicon, Intel macOS, and Windows x64.

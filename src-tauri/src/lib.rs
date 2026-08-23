@@ -1,6 +1,8 @@
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 mod backup;
+#[cfg(test)]
+mod database_tests;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
