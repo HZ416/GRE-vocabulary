@@ -22,6 +22,7 @@
 - [x] Restrictive Content Security Policy and command-level Tauri permissions
 - [x] Import, search, and queue performance tests with 20,000 words
 - [x] Localized English and Chinese interface copy with a persistent language setting
+- [x] Playwright end-to-end import and keyboard-driven review flow
 
 ## Next: smaller improvements
 
@@ -29,7 +30,7 @@
 
 ## Next: medium improvements
 
-- [ ] Playwright end-to-end review flow
+- All planned medium improvements are complete.
 
 ## Release readiness
 

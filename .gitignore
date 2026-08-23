@@ -7,4 +7,5 @@ target/
 *.db-shm
 *.db-wal
 .tools/
-
+playwright-report/
+test-results/

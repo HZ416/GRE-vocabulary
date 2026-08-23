@@ -12,6 +12,7 @@ Prerequisites: Node.js 24 LTS and the stable Rust toolchain.
 npm install
 npm run test
 npm run test:performance
+npm run test:e2e
 npm run typecheck
 npm run lint
 npm run tauri dev
@@ -29,6 +30,6 @@ CSV imports require `lemma` and `source_name` columns. Optional columns include 
 
 On a fresh install, the Dashboard walks through the three-step setup. The Vocabulary page shows an example row and can save a UTF-8 CSV template with every supported column.
 
-The regular suite includes repository, FSRS persistence, backup validation, real file-backed migration, and core React page tests. The separate performance suite exercises import, search, and daily queue creation with 20,000 words. GitHub Actions validates the project and builds unsigned installers for macOS Apple Silicon, macOS Intel, and Windows x64.
+The regular suite includes repository, FSRS persistence, backup validation, real file-backed migration, and core React page tests. The Playwright suite covers CSV import, favorites, keyboard-driven review, statistics, and Dashboard progress in one browser flow backed by an isolated in-memory SQLite database. The separate performance suite exercises import, search, and daily queue creation with 20,000 words. GitHub Actions validates the project and builds unsigned installers for macOS Apple Silicon, macOS Intel, and Windows x64.
 
 See [SPEC.md](SPEC.md) for product requirements, [ROADMAP.md](ROADMAP.md) for implementation status, [ARCHITECTURE.md](ARCHITECTURE.md) for engineering decisions, and [DATA_SOURCES.md](DATA_SOURCES.md) for dataset policy.

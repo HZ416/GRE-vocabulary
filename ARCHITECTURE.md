@@ -20,6 +20,10 @@ Zod validates data returned across untyped boundaries such as SQLite health quer
 
 English copy is the translation key and fallback; a compact in-app dictionary supplies Chinese copy without a runtime service or network request. Migration 004 persists the selected language in `app_settings`, so it follows the same backup and restore path as other preferences.
 
+## Browser E2E tests use an isolated database
+
+Playwright runs the complete React flow in Vite's `e2e` mode. In that mode only, the database boundary dynamically loads an in-memory `sql.js` adapter and applies the same SQL migrations as the desktop app. Each browser page starts empty, no Tauri application data is touched, and production builds statically remove the adapter and its WebAssembly asset.
+
 ## Vocabulary updates are progress-safe
 
 CSV rows are normalized and deduplicated before persistence. Imports only fill missing word metadata, merge sources using a unique `(word_id, source_name)` constraint, and recalculate priority from persisted sources. They never update notes or study-state tables.
