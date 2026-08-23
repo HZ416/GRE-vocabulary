@@ -10,6 +10,7 @@ Prerequisites: Node.js 24 LTS and the stable Rust toolchain.
 
 ```sh
 npm install
+npx playwright install chromium
 npm run test
 npm run test:performance
 npm run test:e2e
