@@ -2,6 +2,8 @@
 
 A local-first GRE vocabulary app built with React, TypeScript, Vite, Tauri, and SQLite.
 
+中文用户请参阅 [GRE Vocabulary 完整中文使用教程](USER_GUIDE_ZH.md)。
+
 Implemented flows include CSV vocabulary import with progress-safe source merging, vocabulary search and detail pages with personal notes, restart-safe FSRS review with daily queues and keyboard shortcuts, persistent study/display preferences, English/Chinese interface switching, portable vocabulary/progress exports, and full SQLite backups.
 
 ## Development
